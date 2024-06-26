@@ -12,7 +12,6 @@ class MoviesController < ApplicationController
       format.json do
         render json: @movies
       end
-
       format.html
     end
   end
@@ -50,10 +49,14 @@ class MoviesController < ApplicationController
   def update
     # the_id = params.fetch(:id)
     # the_movie = Movie.where(id: => the_id).first
-    movie = Movie.find(params.fetch(:id))
+    # movie = Movie.find(params.fetch(:id))
 
-    movie.title = params.fetch(:movie).fetch(:title)
-    movie.description = params.fetch(:movie).fetch(:description)
+    # movie.title = params.fetch(:movie).fetch(:title)
+    # movie.description = params.fetch(:movie).fetch(:description)
+
+    movie_attributes = params.require(:movie).permit(:title, :description)
+
+    movie = Movie.new(movie_attributes)
 
     if movie.valid?
       movie.save
@@ -64,9 +67,12 @@ class MoviesController < ApplicationController
   end
 
   def destroy
-    the_id = params.fetch(:id)
-    movie = Movie.where(id: the_id).first
+    # the_id = params.fetch(:id)
+    # movie = Movie.where(id: the_id).first
 
+    # movie.destroy
+
+    movie = Movie.find(params.fetch(:id))
     movie.destroy
 
     redirect_to movies_url, notice: "Movie deleted successfully."
